@@ -10,12 +10,17 @@ function CCPlayer(id){
 	this.r_target=0;
 	this.tangstt=0;
 	this.name="USR_"+id;
-	this.level=1;
+	
 	var beginR=Math.floor(Math.random() * 4) + 1;
 	this.MVSTT=beginR;
 	this.mySpeed=30;//30-80
 	this.lbdisplay="";
+
+	this.level=1;
 	this.score=0;
+	this.ammo=124;
+	this.health=55;
+	this.rank="10/200";
 
 	this.gunRotation=beginR*90-90;
 	this.gunRTarget=0;
@@ -25,12 +30,17 @@ function CCPlayer(id){
 	this.roomID="";
 	this.zoneid=0;
 
+
+
 	this.pack_bullet=[];
 	this.pack_player=[];
 	this.pack_items=[];
 	this.pack_obs=[];
 	this.type=1;// 1 la player binh thuong, -1 la Boot
 	this.isCollisder=false;
+
+
+	this.timetest=0;
 }
 CCPlayer.prototype.changeRotationGun=function(newroation){	
 	if (Math.abs(this.gunRotation)>360) {
@@ -160,6 +170,13 @@ CCPlayer.prototype.chuanhoagoc=function(huongquay){
 	this.MVSTT=huongquay;
 }
 CCPlayer.prototype.updatePosition=function(df_movetime){
+	this.timetest=this.timetest+df_movetime;
+	if (this.timetest>2) {
+		this.timetest=0;
+		this.ammo=this.ammo-1;
+		this.health=this.health-2;
+	}
+
 	this.lifetime=this.lifetime-df_movetime;
 
 	

@@ -268,7 +268,7 @@ setInterval(function(){
 
 },1000);
 
-
+var testtime=0;
 
 setInterval(function(){
 	var timedt=40/1000;
@@ -280,15 +280,59 @@ setInterval(function(){
 	for (var sname in LIST_SOCKET) {
 		var usr_tmp=LIST_SOCKET[sname];
 		var numbersend=usr_tmp.myPlayer.numberID;
+		var tankPlayer=usr_tmp.myPlayer;
+
+		
+
+		var tank_equip={};
+		tank_equip.a=tankPlayer.ammo;//number
+		tank_equip.h=tankPlayer.health;//number
+
+		var arrayinfo=[];
+		arrayinfo.push(tank_equip);
+
+		var changeInfo=true;// cái này chỉ là test ở máy của em thôi 
+		if (changeInfo) {
+			var tank_info={};// cai nay minh co the tuy chon luc nao co thay doi thi moi gui thoi, khong can phai gui lien tuc 
+			tank_info.l=tankPlayer.level;//number
+			tank_info.s=tankPlayer.score;//number 
+			tank_info.r=tankPlayer.rank;// string: ví dụ là rank: 20/100
+			arrayinfo.push(tank_info);
+		}
+
+
+		var itemslist=[];
+		itemslist.push({id:"10",x:50,y:50,type:1});// items đạn màu đỏ ,anh xem ảnh đính kèm 
+		itemslist.push({id:"11",x:0,y:0,type:2});//item health màu xanh( có dấu cộng )
+		itemslist.push({id:"12",x:20,y:40,type:2});
+		itemslist.push({id:"13",x:-30,y:-10,type:1});
+		itemslist.push({id:"14",x:-10,y:-20,type:2});
+		itemslist.push({id:"15",x:-50,y:50,type:1});
+
 		usr_tmp.emit('UpdatePosition',{
 			numberID:numbersend,
 			tank:usr_tmp.myPlayer.pack_player,
 			obstacbles:usr_tmp.myPlayer.pack_obs,
 			bullet:usr_tmp.myPlayer.pack_bullet,
-			item:[]
+			info:arrayinfo,//nếu có 1 phần tử thì em tự hiểu là chỉ có object equip còn nếu có 2 phần tử thì là thêm thay đổi về level hoặc score
+			item:itemslist
 		});
-		// var Buf=new Buffer('[{y:292w:263id:1x:294h:174}{y:103w:263id:2x:294h:174}{y:545w:243id:3x:145h:304}{y:191w:243id:4x:678h:304}{y:163w:255id:5x:987h:103}{y:454w:255id:6x:426h:103}{y:570w:391id:7x:543h:105}{y:687w:484id:8x:531h:105}{y:644w:484id:9x:1199h:105}{y:484w:484id:10x:1199h:122}{y:437w:173id:11x:809h:159}{y:714w:161id:12x:860h:159}{y:289w:331id:13x:1225h:136}{y:53w:553id:14x:1340h:79}{y:180w:306id:15x:1658h:136}{y:410w:170id:16x:1591h:270}{y:410w:216id:17x:1879h:275}{y:697w:216id:18x:1636h:275}{y:147w:361id:19x:2078h:242}{y:410w:157id:20x:2179h:265}{y:163w:216id:21x:2470h:275}]');
-		// usr_tmp.emit('UpdatePosition',Buf);
+		
+		// ví dụ có 1 xe tank bị nổ thì mình ngay lập tức xoá xe tank đó 
+		// không gửi thông tin xe tank đó về client nữa mà gửi về toạ độ nổ của xe tank thôi
+		// mình có 10 loại xe tank , sau này phải gửi thêm type của nó nữa, nhưng giờ cơ bản chỉ gửi về x,y trước
+		// ở việc thông báo nổ xe tank mình gửi về hàm UpdateExplosion cho nhẹ , ở hàm UpdatePosition phải xử lý nhiều thứ quá, 
+		var explosion=false;
+		testtime++;
+		if (testtime>100) {
+			testtime=0;
+			explosion=true;
+		}
+		if (explosion) {
+			usr_tmp.emit('UpdateExplosion',{
+				ex:[{x:100,y:100},{x:-100,y:-100}]
+			});
+		}
 	}
 },40);
 
