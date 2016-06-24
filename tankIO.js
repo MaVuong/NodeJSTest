@@ -330,7 +330,7 @@ setInterval(function(){
 		}
 		if (explosion) {
 			usr_tmp.emit('UpdateExplosion',{
-				ex:[{x:100,y:100},{x:-100,y:-100}]
+				ex:[{x:100,y:100,tid:100,b_r:90,g_r:120},{x:-100,y:-100,tid:110,b_r:180,g_r:20}]
 			});
 		}
 	}
